@@ -33,7 +33,7 @@ export const hookFactory: NetworkHookFactory = ({ provider, isLoading }) => () =
             const chainId = (await provider!.getNetwork()).chainId;
 
             if (!chainId) {
-                throw "Cannot retrieve Network, please refresh browser of connect to other network."
+                throw "Cannot retrieve Network, please refresh browser or connect to other network."
             }
 
             return NETWORKS[chainId];

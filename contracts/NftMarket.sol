@@ -66,11 +66,10 @@ contract NftMarket is ERC721URIStorage, Ownable {
         return _allNfts[index];
     }
 
-    function tokenOfOwnerByIndex(address owner, uint256 index)
-        public
-        view
-        returns (uint256)
-    {
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) public view returns (uint256) {
         require(index < ERC721.balanceOf(owner), "Index is out of bounds");
         return _ownedTokens[owner][index];
     }
@@ -106,11 +105,10 @@ contract NftMarket is ERC721URIStorage, Ownable {
         return items;
     }
 
-    function mintToken(string memory tokenURI, uint256 price)
-        public
-        payable
-        returns (uint256)
-    {
+    function mintToken(
+        string memory tokenURI,
+        uint256 price
+    ) public payable returns (uint256) {
         require(!tokenURIExists(tokenURI), "token URI already exists");
         require(
             msg.value == listingPrice,
@@ -171,25 +169,25 @@ contract NftMarket is ERC721URIStorage, Ownable {
         emit NftItemCreated(tokenId, price, msg.sender, true);
     }
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal virtual override {
-        super._beforeTokenTransfer(from, to, tokenId);
-        // minting token
-        if (from == address(0)) {
-            _addTokenToAllTokensEnumeration(tokenId);
-        } else if (from != to) {
-            _removeTokenFromOwnerEnumeration(from, tokenId);
-        }
+    // function _beforeTokenTransfer(
+    //     address from,
+    //     address to,
+    //     uint256 tokenId
+    // ) internal virtual override {
+    //     super._beforeTokenTransfer(from, to, tokenId);
+    //     // minting token
+    //     if (from == address(0)) {
+    //         _addTokenToAllTokensEnumeration(tokenId);
+    //     } else if (from != to) {
+    //         _removeTokenFromOwnerEnumeration(from, tokenId);
+    //     }
 
-        if (to == address(0)) {
-            _removeTokenFromAllTokensEnumeration(tokenId);
-        } else if (to != from) {
-            _addTokenToOwnerEnumeration(to, tokenId);
-        }
-    }
+    //     if (to == address(0)) {
+    //         _removeTokenFromAllTokensEnumeration(tokenId);
+    //     } else if (to != from) {
+    //         _addTokenToOwnerEnumeration(to, tokenId);
+    //     }
+    // }
 
     function _addTokenToAllTokensEnumeration(uint256 tokenId) private {
         _idToNftIndex[tokenId] = _allNfts.length;
@@ -203,9 +201,10 @@ contract NftMarket is ERC721URIStorage, Ownable {
         _idToOwnedIndex[tokenId] = length;
     }
 
-    function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId)
-        private
-    {
+    function _removeTokenFromOwnerEnumeration(
+        address from,
+        uint256 tokenId
+    ) private {
         uint256 lastTokenIndex = ERC721.balanceOf(from) - 1;
         uint256 tokenIndex = _idToOwnedIndex[tokenId];
 
